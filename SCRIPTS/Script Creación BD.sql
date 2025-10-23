@@ -1,32 +1,25 @@
--- =============================
--- CREACIÓN DE LA BASE DE DATOS (SQL Server)
--- =============================
-use master
-
+USE master;
+GO
 CREATE DATABASE PlataformaAgricola;
+GO
 USE PlataformaAgricola;
+GO
 
-
-
--- ======================
 -- Tabla: Usuarios
--- ======================
 CREATE TABLE Usuarios (
     id_usuario INT IDENTITY(1,1) PRIMARY KEY,
     nombre NVARCHAR(100) NOT NULL,
     apellidos NVARCHAR(100) NOT NULL,
-	dni NVARCHAR(20) NOT NULL, 
+    dni VARCHAR(20) NOT NULL UNIQUE,
     correo NVARCHAR(150) NOT NULL UNIQUE,
-	telefono NVARCHAR (20) NOT NULL,
-    contrasena_hash NVARCHAR(255) NOT NULL,
-    tipo_usuario NVARCHAR(50) NOT NULL, -- Agricultor o Comprador
+    telefono VARCHAR(20) NOT NULL,
+    contrasena VARCHAR(255) NOT NULL,
+    tipo_usuario VARCHAR(50) NOT NULL,
     fecha_registro DATETIME DEFAULT GETDATE(),
     estado BIT DEFAULT 1
 );
 
--- ======================
 -- Tabla: Productos
--- ======================
 CREATE TABLE Productos (
     id_producto INT IDENTITY(1,1) PRIMARY KEY,
     id_agricultor INT NOT NULL,
@@ -40,9 +33,7 @@ CREATE TABLE Productos (
     FOREIGN KEY (id_agricultor) REFERENCES Usuarios(id_usuario)
 );
 
--- ======================
 -- Tabla: Pagos
--- ======================
 CREATE TABLE Pagos (
     id_pago INT IDENTITY(1,1) PRIMARY KEY,
     id_comprador INT NOT NULL,
@@ -55,12 +46,10 @@ CREATE TABLE Pagos (
     FOREIGN KEY (id_producto) REFERENCES Productos(id_producto)
 );
 
--- ======================
 -- Tabla: Transferencias
--- ======================
 CREATE TABLE Transferencias (
     id_transferencia INT IDENTITY(1,1) PRIMARY KEY,
-    id_pago INT NOT NULL,
+    id_pago INT NOT NULL UNIQUE,
     codigo_referencia NVARCHAR(100),
     entidad_bancaria NVARCHAR(100),
     comprobante_url NVARCHAR(255),
@@ -68,4 +57,3 @@ CREATE TABLE Transferencias (
     estado NVARCHAR(50) DEFAULT 'Procesando',
     FOREIGN KEY (id_pago) REFERENCES Pagos(id_pago)
 );
-
