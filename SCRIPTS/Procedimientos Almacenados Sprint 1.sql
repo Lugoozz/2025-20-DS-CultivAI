@@ -1,43 +1,45 @@
-﻿USE PlataformaAgricola;
+USE PlataformaAgricola;
 GO
 
 -- ==========================================
 -- 1️⃣ Registrar Usuario
 -- ==========================================
-CREATE PROCEDURE sp_RegistrarUsuario
+CREATE OR ALTER PROCEDURE sp_RegistrarUsuario
     @nombre NVARCHAR(100),
-    @apellido NVARCHAR(100),
+    @apellidos NVARCHAR(100),
+    @dni VARCHAR(20),
     @correo NVARCHAR(150),
-    @contrasena_hash NVARCHAR(255),
-    @tipo_usuario NVARCHAR(50),
-    @dni CHAR(8),
-    @telefono NVARCHAR(15)
+    @telefono VARCHAR(20),
+    @contrasena NVARCHAR(255),
+    @tipo_usuario NVARCHAR(50)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    INSERT INTO Usuarios (nombre, apellido, correo, contrasena_hash, tipo_usuario, dni, telefono)
-    VALUES (@nombre, @apellido, @correo, @contrasena_hash, @tipo_usuario, @dni, @telefono);
+    INSERT INTO Usuarios (nombre, apellidos, dni, correo, telefono, contrasena, tipo_usuario)
+    VALUES (@nombre, @apellidos, @dni, @correo, @telefono, @contrasena, @tipo_usuario);
 END;
 GO
 
+-- ✅ Ejemplo de prueba
 EXEC sp_RegistrarUsuario 
-    @nombre = 'Juan',
-    @apellido = 'Ramos',
-    @correo = 'juanramos@example.com',
-    @contrasena_hash = 'hash123456',
-    @tipo_usuario = 'Agricultor',
+    @nombre = N'Juan',
+    @apellidos = N'Ramos',
     @dni = '12345678',
-    @telefono = '987654321';
+    @correo = N'juanramos@example.com',
+    @telefono = '987654321',
+    @contrasena = N'hash123456',
+    @tipo_usuario = N'Agricultor';
 
-SELECT * from Usuarios
+SELECT * FROM Usuarios;
+GO
 
 
 
 -- ==========================================
 -- 2️⃣ Registrar Producto
 -- ==========================================
-CREATE PROCEDURE sp_RegistrarProducto
+CREATE OR ALTER PROCEDURE sp_RegistrarProducto
     @id_agricultor INT,
     @nombre_producto NVARCHAR(100),
     @descripcion NVARCHAR(255),
@@ -54,23 +56,25 @@ BEGIN
 END;
 GO
 
-
+-- ✅ Ejemplo de prueba
 EXEC sp_RegistrarProducto
     @id_agricultor = 1,
-    @nombre_producto = 'Papa Andina',
-    @descripcion = 'Papa orgánica cultivada en altura',
+    @nombre_producto = N'Papa Andina',
+    @descripcion = N'Papa orgánica cultivada en altura',
     @precio = 3.50,
     @stock = 100,
-    @unidad_medida = 'Kg',
-    @imagen_url = 'https://miplataforma.com/imagenes/papa.jpg';
+    @unidad_medida = N'Kg',
+    @imagen_url = N'https://miplataforma.com/imagenes/papa.jpg';
 
-	SELECT * from Productos
+SELECT * FROM Productos;
+GO
+
 
 
 -- ==========================================
 -- 3️⃣ Registrar Pago
 -- ==========================================
-CREATE PROCEDURE sp_RegistrarPago
+CREATE OR ALTER PROCEDURE sp_RegistrarPago
     @id_comprador INT,
     @id_producto INT,
     @monto DECIMAL(10,2),
@@ -84,20 +88,22 @@ BEGIN
 END;
 GO
 
-
+-- ✅ Ejemplo de prueba
 EXEC sp_RegistrarPago
     @id_comprador = 1,
     @id_producto = 1,
     @monto = 70.00,
-    @metodo_pago = 'Transferencia Bancaria';
+    @metodo_pago = N'Transferencia Bancaria';
 
-SELECT * from Pagos
+SELECT * FROM Pagos;
+GO
+
 
 
 -- ==========================================
 -- 4️⃣ Registrar Transferencia
 -- ==========================================
-CREATE PROCEDURE sp_RegistrarTransferencia
+CREATE OR ALTER PROCEDURE sp_RegistrarTransferencia
     @id_pago INT,
     @codigo_referencia NVARCHAR(100),
     @entidad_bancaria NVARCHAR(100),
@@ -111,11 +117,12 @@ BEGIN
 END;
 GO
 
+-- ✅ Ejemplo de prueba
 EXEC sp_RegistrarTransferencia
-    @id_pago = 2,
-    @codigo_referencia = 'REF-20251018-001',
-    @entidad_bancaria = 'Banco de Crédito del Perú',
-    @comprobante_url = 'https://miplataforma.com/comprobantes/001.pdf';
+    @id_pago = 1,
+    @codigo_referencia = N'REF-20251018-001',
+    @entidad_bancaria = N'Banco de Crédito del Perú',
+    @comprobante_url = N'https://miplataforma.com/comprobantes/001.pdf';
 
-
-SELECT * from Transferencias
+SELECT * FROM Transferencias;
+GO
