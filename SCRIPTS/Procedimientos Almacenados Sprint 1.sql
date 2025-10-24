@@ -1,128 +1,148 @@
 USE PlataformaAgricola;
-GO
 
 -- ==========================================
 -- 1️⃣ Registrar Usuario
 -- ==========================================
-CREATE OR ALTER PROCEDURE sp_RegistrarUsuario
-    @nombre NVARCHAR(100),
-    @apellidos NVARCHAR(100),
-    @dni VARCHAR(20),
-    @correo NVARCHAR(150),
-    @telefono VARCHAR(20),
-    @contrasena NVARCHAR(255),
-    @tipo_usuario NVARCHAR(50)
-AS
+DROP PROCEDURE IF EXISTS sp_RegistrarUsuario;
+DELIMITER //
+CREATE PROCEDURE sp_RegistrarUsuario(
+    IN p_nombre VARCHAR(100),
+    IN p_apellidos VARCHAR(100),
+    IN p_dni VARCHAR(20),
+    IN p_correo VARCHAR(150),
+    IN p_telefono VARCHAR(20),
+    IN p_contrasena VARCHAR(255),
+    IN p_tipo_usuario VARCHAR(50)
+)
 BEGIN
-    SET NOCOUNT ON;
-
     INSERT INTO Usuarios (nombre, apellidos, dni, correo, telefono, contrasena, tipo_usuario)
-    VALUES (@nombre, @apellidos, @dni, @correo, @telefono, @contrasena, @tipo_usuario);
-END;
-GO
+    VALUES (p_nombre, p_apellidos, p_dni, p_correo, p_telefono, p_contrasena, p_tipo_usuario);
+END //
+DELIMITER ;
 
 -- ✅ Ejemplo de prueba
-EXEC sp_RegistrarUsuario 
-    @nombre = N'Juan',
-    @apellidos = N'Ramos',
-    @dni = '12345678',
-    @correo = N'juanramos@example.com',
-    @telefono = '987654321',
-    @contrasena = N'hash123456',
-    @tipo_usuario = N'Agricultor';
+CALL sp_RegistrarUsuario(
+    'Juan',
+    'Ramos',
+    '123456789',
+    'juanramos@example.com',
+    '987654321',
+    'hash123456',
+    'Agricultor'
+);
 
 SELECT * FROM Usuarios;
-GO
-
 
 
 -- ==========================================
 -- 2️⃣ Registrar Producto
 -- ==========================================
-CREATE OR ALTER PROCEDURE sp_RegistrarProducto
-    @id_agricultor INT,
-    @nombre_producto NVARCHAR(100),
-    @descripcion NVARCHAR(255),
-    @precio DECIMAL(10,2),
-    @stock INT,
-    @unidad_medida NVARCHAR(50),
-    @imagen_url NVARCHAR(255)
-AS
+DROP PROCEDURE IF EXISTS sp_RegistrarProducto;
+DELIMITER //
+CREATE PROCEDURE sp_RegistrarProducto(
+    IN p_id_agricultor INT,
+    IN p_nombre_producto VARCHAR(100),
+    IN p_descripcion VARCHAR(255),
+    IN p_precio DECIMAL(10,2),
+    IN p_stock INT,
+    IN p_unidad_medida VARCHAR(50),
+    IN p_imagen_url VARCHAR(255)
+)
 BEGIN
-    SET NOCOUNT ON;
-
     INSERT INTO Productos (id_agricultor, nombre_producto, descripcion, precio, stock, unidad_medida, imagen_url)
-    VALUES (@id_agricultor, @nombre_producto, @descripcion, @precio, @stock, @unidad_medida, @imagen_url);
-END;
-GO
+    VALUES (p_id_agricultor, p_nombre_producto, p_descripcion, p_precio, p_stock, p_unidad_medida, p_imagen_url);
+END //
+DELIMITER ;
 
 -- ✅ Ejemplo de prueba
-EXEC sp_RegistrarProducto
-    @id_agricultor = 1,
-    @nombre_producto = N'Papa Andina',
-    @descripcion = N'Papa orgánica cultivada en altura',
-    @precio = 3.50,
-    @stock = 100,
-    @unidad_medida = N'Kg',
-    @imagen_url = N'https://miplataforma.com/imagenes/papa.jpg';
+CALL sp_RegistrarProducto(
+    1,
+    'Papa Andina',
+    'Papa orgánica cultivada en altura',
+    3.50,
+    100,
+    'Kg',
+    'https://miplataforma.com/imagenes/papa.jpg'
+);
 
 SELECT * FROM Productos;
-GO
-
 
 
 -- ==========================================
 -- 3️⃣ Registrar Pago
 -- ==========================================
-CREATE OR ALTER PROCEDURE sp_RegistrarPago
-    @id_comprador INT,
-    @id_producto INT,
-    @monto DECIMAL(10,2),
-    @metodo_pago NVARCHAR(50)
-AS
+DROP PROCEDURE IF EXISTS sp_RegistrarPago;
+DELIMITER //
+CREATE PROCEDURE sp_RegistrarPago(
+    IN p_id_comprador INT,
+    IN p_id_producto INT,
+    IN p_monto DECIMAL(10,2),
+    IN p_metodo_pago VARCHAR(50)
+)
 BEGIN
-    SET NOCOUNT ON;
-
     INSERT INTO Pagos (id_comprador, id_producto, monto, metodo_pago)
-    VALUES (@id_comprador, @id_producto, @monto, @metodo_pago);
-END;
-GO
+    VALUES (p_id_comprador, p_id_producto, p_monto, p_metodo_pago);
+END //
+DELIMITER ;
 
 -- ✅ Ejemplo de prueba
-EXEC sp_RegistrarPago
-    @id_comprador = 1,
-    @id_producto = 1,
-    @monto = 70.00,
-    @metodo_pago = N'Transferencia Bancaria';
+CALL sp_RegistrarPago(
+    1,
+    1,
+    70.00,
+    'Transferencia Bancaria'
+);
 
 SELECT * FROM Pagos;
-GO
-
 
 
 -- ==========================================
 -- 4️⃣ Registrar Transferencia
 -- ==========================================
-CREATE OR ALTER PROCEDURE sp_RegistrarTransferencia
-    @id_pago INT,
-    @codigo_referencia NVARCHAR(100),
-    @entidad_bancaria NVARCHAR(100),
-    @comprobante_url NVARCHAR(255)
-AS
+DROP PROCEDURE IF EXISTS sp_RegistrarTransferencia;
+DELIMITER //
+CREATE PROCEDURE sp_RegistrarTransferencia(
+    IN p_id_pago INT,
+    IN p_codigo_referencia VARCHAR(100),
+    IN p_entidad_bancaria VARCHAR(100),
+    IN p_comprobante_url VARCHAR(255)
+)
 BEGIN
-    SET NOCOUNT ON;
-
     INSERT INTO Transferencias (id_pago, codigo_referencia, entidad_bancaria, comprobante_url)
-    VALUES (@id_pago, @codigo_referencia, @entidad_bancaria, @comprobante_url);
-END;
-GO
+    VALUES (p_id_pago, p_codigo_referencia, p_entidad_bancaria, p_comprobante_url);
+END //
+DELIMITER ;
 
 -- ✅ Ejemplo de prueba
-EXEC sp_RegistrarTransferencia
-    @id_pago = 1,
-    @codigo_referencia = N'REF-20251018-001',
-    @entidad_bancaria = N'Banco de Crédito del Perú',
-    @comprobante_url = N'https://miplataforma.com/comprobantes/001.pdf';
+CALL sp_RegistrarTransferencia(
+    1,
+    'REF-20251018-001',
+    'Banco de Crédito del Perú',
+    'https://miplataforma.com/comprobantes/001.pdf'
+);
 
 SELECT * FROM Transferencias;
-GO
+
+
+-- ==========================================
+-- 5️⃣ Verificar Usuario
+-- ==========================================
+DELIMITER $$
+
+CREATE PROCEDURE sp_VerificarUsuario (
+    IN p_correo NVARCHAR(150),
+    IN p_contrasena NVARCHAR(255)
+)
+BEGIN
+    SELECT 
+        id_usuario,
+        nombre,
+        tipo_usuario
+    FROM Usuarios
+    WHERE correo = p_correo 
+      AND contrasena = p_contrasena
+      AND estado = 1;
+END$$
+
+DELIMITER ;
+
