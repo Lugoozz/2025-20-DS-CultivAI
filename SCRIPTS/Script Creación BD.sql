@@ -70,25 +70,7 @@ CREATE TABLE DetalleVentas (
     FOREIGN KEY (id_producto) REFERENCES Productos(id_producto)
 );
 
--- Obtener datos del usuario
 
-
-
-DROP PROCEDURE IF EXISTS sp_ObtenerPerfilUsuario;
-DELIMITER //
-CREATE PROCEDURE sp_ObtenerPerfilUsuario(IN p_id_usuario INT)
-BEGIN
-    SELECT 
-        nombre,
-        apellidos,
-        dni,
-        correo,
-        telefono,
-        contrasena
-    FROM usuarios
-    WHERE id_usuario = p_id_usuario;
-END //
-DELIMITER ;
 
 
 
@@ -96,6 +78,7 @@ select * from ventas;
 select * from detalleventas;
 select * from pagos;
 select * from usuarios;
+
 
 
 
