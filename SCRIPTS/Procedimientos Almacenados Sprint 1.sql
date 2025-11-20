@@ -291,3 +291,35 @@ BEGIN
       AND estado = 1;
 END //
 DELIMITER ;
+
+-- ========================================
+-- 15. Sacar Todos los Productos
+-- ========================================
+
+DROP PROCEDURE IF EXISTS sp_ObtenerTodosProductos;
+DELIMITER //
+CREATE PROCEDURE sp_ObtenerTodosProductos()
+BEGIN
+    SELECT nombre_producto FROM productos;
+END //
+DELIMITER ;
+
+
+
+-- ========================================
+-- 16. Obetener las ventas por Productos
+-- ========================================
+DELIMITER //
+CREATE PROCEDURE sp_ObtenerVentasProducto(
+    IN p_nombre VARCHAR(100)
+)
+BEGIN
+    SELECT 
+        IFNULL(SUM(dv.cantidad), 0) AS ventas
+    FROM detalleventas dv
+    INNER JOIN productos p ON dv.id_producto = p.id_producto
+    WHERE p.nombre_producto = p_nombre;
+END //
+DELIMITER ;
+
+
